@@ -150,14 +150,14 @@ let showParseResult result =
     | true,value -> sprintf "Value parsed is %s" (value.ToString())
     | false,_ -> "Value couldn't be parsed" 
 
-let tryParseResult = Int32.TryParse "Keine Zahl" |> showParseResult
-let tryParseResult' = Int32.TryParse "1" |> showParseResult
+let tryParseR = Int32.TryParse "Keine Zahl" |> showParseResult
+let tryParseR' = Int32.TryParse "1" |> showParseResult
 
 
 (** <div style="display: none" > *)
 (*** define-output:Tuple-TryParsePatternMatching ***)
-printf "result = %A | " tryParseResult 
-printf "result' = %A" tryParseResult'
+printf "tryParseResult = %A | " tryParseR 
+printf "tryParseResult' = %A" tryParseR'
 (** </div> *)
 
 (*** include-output: Tuple-TryParsePatternMatching ***)
@@ -175,7 +175,8 @@ Eine bennante Menge von benannten Elementen
 - Ist kein ad-hoc Typ
 
 ' Wichitg: es ist auch nur ein Tuple, ein multiplication type
-
+' Ist wie ein POCO, mit Constructor, private backing fields, public setters, equality overloads
+' POCO with lightweight syntax
 
 ---
 ### Record: Deklaration
@@ -308,8 +309,9 @@ printf "r''' = %s " r'''
 - Unterscheidungs-Union auf deutsch
 - Besteht aus einer Anzahl von benannten Fällen
 - Ein benannter Fall kann aus einer Anzahl von Werten bestehen
-- Nur eines der bennanten Fällt ist gültig für einen Ausdruck
+- Nur eines der bennanten Fälle ist gültig für einen Ausdruck
 - Mit Bezeichnern oder ohne
+
 
 *)
 
@@ -319,10 +321,12 @@ type Figur =
 
 (**
 
-' Ausdrucke sind immutable, ändert sich der Wert nicht.  Es sieht ein bisschen wie ein Enum ist es aber nicht
+' Es sieht ein bisschen wie ein Enum ist es aber nicht
 ' Ich kann einen Enum mit DU definieren, die Interoperability mit C# wäre aber dahin.  Dafür muss ich den .net Typ verwenden
 ' DU ist das ganze.  Die einzelnen möglichen Werte heißen Union Case
 ' Single Case gibt es auch und sind sehr schön im DDD
+' Closed set
+' Seperation of Data and Behavior: Behavior is not scatterd across classes
 
 
 ---
@@ -410,11 +414,11 @@ printf "Viereckfläche = %f" viereckFlaeche
 // Erste Longitude ist der Name des Typs
 // Zweite ist der Name des Constructors
 // Müssen nicht identisch sein!
-type Longitude = Longitude of float 
-type Latitude = Latitude of float
+type Laengengrad = Laengengrad of float 
+type Breitengrad = Breitengrad of float
 
-let longitude = Longitude(9.993009567260742)
-let latitude  = Latitude(53.553260805869805)
+let laengengrad = Laengengrad(9.993009567260742)
+let breitengrad = Breitengrad(53.553260805869805)
 
 // Der Compiler mag das nicht, es handelt sich um zwei Typen
 // let gleich = longitude = latitude 
@@ -424,10 +428,11 @@ let latitude  = Latitude(53.553260805869805)
 ***
 ### Option
 
-- Ist eine besondere Form des DU
+- Ist eine normale Form des DU
 - Zu finden in vielen funktionalen Sprachen
 
 ' In Haskel heißt dieser Typ Maybe, Just, Nothing. in Scala heißt es auch option, some, none.
+' wirklich nichts besonders, nur das Module Option hat eigne funktionen
 
 *)
 
@@ -463,7 +468,7 @@ let optionMatch s =
 
 let z  = optionMatch (Some("Hello"))
 // Das nicht idiomatisch, nur für Demonstrationszwecke
-let z' = optionMatch Option<string>.None
+let z' = optionMatch None
 
 (**
 
@@ -501,7 +506,8 @@ printf "x = %A | x' = %A" x x'
 - Zugriffe auf fehlende Werte sind dann compile-time und keine run-time Fehler
 
 ' Referenzen auf nicht vorhandene Objekte sind nicht die beste Artundweise 
-
+' Code Analysis wird verwendet um Warnungen zu geben in C# 7.0.  Keine typ Unterstützung möglich wegen backward compatibility
+' C# OO <-> Imperative <-> Fun
 
 ---
 
@@ -554,7 +560,7 @@ let none = Option<string>.None
 ### DDD und FP
 #### Was bis her geschah
 
-- Design Prozesse gehen von einer Dreiteilung
+- Design Prozesse gehen von einer Dreiteilung aus
     - Fachleute mit Fachwissen
     - Modellierer erstellen Design Dokumente in einem Zwischenformat (z.B. UML)
     - Programmierer erstellen Code anhand der Design Dokumente
@@ -797,7 +803,8 @@ module DDD0 =
 
 (**
 
-' Der neue Typ soll nur dann erstellt werden wenn die Verifikation erfolgt ist.  Die Funktion VerifyEmail' könnte ich z.B. mittels F# Scope Regeln so erstellen dass diese als einziges Gateway vorhanden ist um an das Typ VerifizierteEmail zu erzeugen
+' Der neue Typ soll nur dann erstellt werden wenn die Verifikation erfolgt ist.  
+' Die Funktion VerifyEmail' könnte ich z.B. mittels F# Scope Regeln so erstellen dass diese als einziges Gateway vorhanden ist um an das Typ VerifizierteEmail zu erzeugen
 
 --- 
 ### DDD und F#
