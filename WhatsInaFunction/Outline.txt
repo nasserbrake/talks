@@ -1,0 +1,82 @@
+Einführung auf 20 Minuten
+
+Geschichte
+
+Komposition erfordert Wissen über Primitives
+
+Einführung soll auch code Beispiele enthalten (Spannung)
+
+Vermeide die Text Wiederholung vom dem was ich erzähle
+
+Funktion oder nicht? Je nach Zeit
+
+Immutability braucht ein Bild
+
+Sag was ML ist!
+
+
+CODE
+
+Domain/Range erklären
+
+Complex: Record stellt den Sachverhalt besser dar durch Typ und die Namen der Member
+
+Complex record: falls ich den Fall habe dass nur der Imaginary Teil bekannt ist, dann ertelle ich hierfür einen neuen Typ
+
+Höhengrad und Breitengrad = Längengrad + Breitengrad
+
+Option: Nutzung mehr reden?
+
+Den Zuhörern eine Idee geben was wie lange dauern wird
+
+Vortrag die zweite
+
+Statement vs expression
+Mehr Beispiele für Statements, dann die gleichen Ausdrücke in F#
+Aufzeigen dass selbst eine if in F# einen Ausdruck ist in dem let verwendet wird, und die if's, do's etc zu einem Bezeichner gebunden werden
+
+Bereich
+file:///C:/My%20Web%20Sites/FSFunProfit/fsharpforfunandprofit.com/posts/thinking-functionally-intro/index.html
+befasst sich ausschließlich mit den Funktionen und deren Verwendung in einer funktionalen Sprache, z.B. F#
+
+Domain und Range, Funktion als Mapping, Determinism is the name of th game, bitte keine Faxen
+
+The arrow notation "->" is used to show the domain and range. 
+
+A function always gives the same output value for a given input value
+A function has no side effects.
+
+The crude C# Implementation of add1, it really is just a mapping, nothing else
+
+evaluating the function is not actually calculating or manipulating anything; it is just 
+
+A GLORIFIED LOOKUP.
+
+The Power of Pure Functions
+Parallelization
+Lazy evaluation
+Memoization is possible as a byproduct of the mapping-nature of pure functions
+Order Precedence istnot enforced, compare to statements
+
+Letzte Hiobs Botschaft
+- Input und Output are immutable
+- Mathematische Funktionen ben nur einen input und einen output
+
+Aber keine Sorge
+
+Binding: using a name to represent a value.
+Associating a name with a value, to remain for ever bound
+
+Simple Value vs. Function Value
+
+Differences exist: 
+- Function types unterstützen keine Equality!
+- Function types need to be evaluated 
+
+Unit : "void" (the type) and "null" (the value) in C#.
+
+
+
+
+
+
