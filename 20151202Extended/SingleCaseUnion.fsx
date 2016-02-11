@@ -20,11 +20,12 @@ let cid' = CustomerIdConstructorFunction 5
 let oid' = OrderId 5
 
 // Deconstruction
-let (CustomerIdConstructorFunction cid'') = cid'
+let (CustomerIdConstructorFunction cidAsInt) = cid'
 
 // das geht jetzt nicht mehr!
 // cIdf oid'
 
 // Structural equality
 let cid'' = CustomerIdConstructorFunction 5
+
 cid'' = cid'
