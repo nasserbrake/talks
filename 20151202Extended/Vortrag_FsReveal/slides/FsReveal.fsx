@@ -585,43 +585,43 @@ let none' = Option<string>.None
 
 ***
 ### DDD und FP
-#### Was bis her geschah
+#### The story hitherto
 
-- Design-Prozesse gehen von einer Dreiteilung aus
-    - Fachleute mit Fachwissen
-    - Modellierer erstellen Design-Dokumente in einem Zwischenformat (z.B. UML)
-    - Programmierer erstellen Code anhand der Design-Dokumente
+- Processes of design often assume a threefold division
+    - Business people with domain knowledge
+    - Business analysts issue design-documents using intermediate formats (i.e. UML)
+    - Programmers write software based on design-documents
 
 ---
 ### DDD und FP
-#### Was bis her geschah
+#### The story hitherto
 
-- Konsequenzen
-    - Programmierer reden nicht mit Fachleuten
-    - Roundtrip Engineering notwendig um Code und Design Dokumente auf einem Stand zu halten
-    - Code kann nicht so dargestellt werden, dass Fachleute es einsehen können
+- Consequences
+    - Programmers don't communicate with those who possess domain-knowledge (not directly)
+    - Roundtrip Engineering keeps code and design-documents in sync
+    - Business people have no direct interaction with code
     
 ' Ohne dass sie kotzen
 
     
 ---
 ### DDD und FP
-#### Die Hoffnung
+#### The hope
 
-- Design-Dokumente, die verifizierbar sind
-    - Verifizierbar durch Einsehen
-    - Verifizierbar durch eine Maschine (Compiler)
+- Verifeiable design-documents
+    - You can reason about
+    - Compiler verification
 
 >"A good static type system is like having compile-time unit tests" (S. Wlaschin)
 
 ---
 ### DDD und FP
-#### Die Hoffnung
+#### The hope: Domain knowledge as a data structure
 
-- Code als Design-Dokument
-    - Das Code ist das Model: Keine Zwischenformate
-    - Datenstrukturen und Verhalten (zum Teil) durch Datenstrukturen darstellen
-    - Einbetten von Domainlogik in den Datenstrukturen
+- Code as design-document
+    - Code is the model: no intermediate formats
+    - Datenstrukturen are modeled as code
+    - Behavior is partially modeled through the type system
 
 >"Making illegal states unrepresentable" (Y. Minsky)
 
@@ -632,10 +632,10 @@ let none' = Option<string>.None
 
 ---
 ### DDD und F#
-#### Vorteile des F# Typ System
+#### Advantages of the F# type system
 
-- Typ System begünstigt Komposition<!-- .element: class="fragment grow" -->
-- DU erlauben eine kompakte Darstellung von Zuständen
+- Type system embraces composition
+- DU allow a comprehensive representation of states
 
 ' - In C# oder in Java ist die Hemmschwelle relativ hoch neue Types zu erstellen. Es gibt sogar das code smell "Primitive Obsession", kein Scherz
 ' - Komposition erlaubt es einfache Typen zu immer komplexeren zusammenzufassen.  Es ist erstaunlich wie viel dann auf eine Seite passt
@@ -644,10 +644,10 @@ let none' = Option<string>.None
 
 ---
 ### DDD und F#
-#### Vorteile des F# Typ System
+#### Advantages of the F# type system
 
-- Light-weight Typen: geringe Anzahl der Zeilen, Keine Sonderzeichen
-- Exhaustivness führt zur Korrektheit
+- Light-weight types: less LOCs, less symbols to consider
+- Exhaustivness can lead to correctness
 
 
 ' - Die geringe Zahl von Sonderzeichen/Schlüsselwörtern macht Nicht-Programmierern weniger Angst
@@ -657,13 +657,13 @@ let none' = Option<string>.None
 --- 
 ### DDD und F#
 
-- Beispiele in den kommenden Seiten stammen aus 
+- Examples from 
     - fsharpforfunandprofit
     - Jane Street (kein F#, OCaml)
 
 ---
 ### DDD und F#
-#### Mehr Zustände
+#### More states
 
 *)
 
@@ -681,9 +681,11 @@ type ConnectionInfo = {
 
 (**
 
+' An Enum representing states, mixed with a single type that contains a mixture of legal and illegal data
+
 ---
 ### DDD und F#
-#### Mehr Zustände
+#### More states
 
 *)
 
@@ -702,21 +704,22 @@ type ConnectionInfo' =
 
 --- 
 ### DDD und F#
-#### Intern ODER extern
+#### Own Employee OR employee of a customer
 *)
 
-type Abteilung = { Name:string; Beschreibung:string; }
+type Department = { Name:string; Description:string; }
 
-type Kunde = { Id:int; Name:string; }
+type Customer = { Id:int; Name:string; }
 
 type Person = { Id:int; 
-                Vorname:string; 
-                Nachname:string; 
-                Abteilung: Abteilung option; 
-                Kunde: Kunde option; }
+                Name:string; 
+                Surname:string; 
+                Department: Department option; 
+                Customer: Customer option; }
 
 (**
-' Theoretisch, hindert mich nichts daran sowohl Department und Customer leer zu lassen. Construktoren und Scope sind die Optionen die ich habe.  Aber es ist nicht erkennbar
+' Theoretisch, hindert mich nichts daran sowohl Department und Customer leer zu lassen. 
+' Construktoren und Scope sind die Optionen die ich habe.  Aber es ist nicht erkennbar
 ' Ich muss aktiv über mein Code eingreifen um zu sichern dass mindestens eines der beiden belegt ist
 ' Nachnamen und Vornamen sind häufig gemeinsam anzutreffen, die Beiden werden meistens als einheit betrachtet
 ' Notfalls muss eine ReadOnly Property erstellen um herauszufinden dass eine Person intern oder extern ist
@@ -724,22 +727,22 @@ type Person = { Id:int;
 
 --- 
 ### DDD und F#
-#### Komposition
+#### Composition
 
-- Komposition 
-- DUs erlauben eine "geschlossene" Auswahl
+- Composition 
+- DUs create closed sets
 
 *)
 
 type PersonenName = { Titel: string option; Vorname:string; Nachname:string; }
 
-type Angestellter = { Id:int; Name:PersonenName; Department: Abteilung;}
+type Employee = { Id:int; Name:PersonenName; Department: Department;}
 
-type Externer = { Id:int; Name:PersonenName; Customer:Kunde;}
+type EmployeeOfCustomer = { Id:int; Name:PersonenName; Customer:Customer;}
 
 type Person' = 
-    | Angestellter of Angestellter
-    | Externer of Externer
+    | Angestellter of Employee
+    | EmployeeOfCustomer of EmployeeOfCustomer
 
 (**
 
@@ -755,36 +758,50 @@ type Person' =
 
 ---
 ### DDD und F#
-#### Model für eine Email/Telefonenummer/Kundennummer etc.
+#### Models for email, phone, customer number, etc.  
 
-' Single Case union bedeutet, dass ich einen eignen Type für Emails reserviere.
-' Funktionen/Datenstrukturen, die eine Email erfordern/zurückgeben, können dies jetzt mittels der Typdeklaration kundtun. 
-' Emails sind halt keine strings.
+' Use single case union to reserve a type for emails
+' Functions and data structures that require email can now state this in a declarative manner
+' It's possible to *hide* type constructors behind a module to insure compliance
+' Emails are *NOT* strings!
 
 *)
 
 // single case union
 type Email = Email of string
-type Telefon = PhoneNumber of string
-type Kundennummer = CustomerNumber of string
+
+let emailConstructor s = 
+    if System.Text.RegularExpressions.Regex.IsMatch(s,@"^\S+@\S+\.\S+$") 
+        then Some (Email s)
+        else None
+
+let v = emailConstructor "n@b.de"
+let v' = emailConstructor "vvv"
+
+(** <div style="display: none" > *)
+(*** define-output:SCU-Email ***)
+printf "n@b.de = %A | vvv = %A" v v'
+(** </div> *)
+
+(*** include-output:SCU-Email ***)
 
 (**
 
 --- 
 ### DDD und F#
-#### Zustände
-- Typ System hilft
-    - Zusammenhängende Informationen zusammenfassen
-    - Zustände darstellen
+#### States
+- Type system helps
+    - bring realted data in structures
+    - represent states
 
 *)
 
 module DDD0 = 
     open System
 
-    type PersonenName = { Titel: string option; Vorname:string; Nachname:string; }
+    type PersonalName = { Title: string option; Surname:string; Name:string; }
 
-    type Kontakt = { Name:PersonenName; Email:Email; EmailVerifiziert:bool; }
+    type Contact = { Name:PersonalName; Email:Email; EmailVerified:bool; }
 
 (**
 
@@ -793,7 +810,7 @@ module DDD0 =
 
 --- 
 ### DDD und F#
-#### Zustände
+#### States
 
 *)
 
@@ -802,10 +819,10 @@ module DDD0 =
     type VerifyEmail = Email -> EmailVerificationToken -> bool
 
     let ``Funktion gilt nur für verifizierte`` kontakt = 
-        if kontakt.EmailVerifiziert then
+        if kontakt.EmailVerified then
             "???"
         else
-            "Ja das darf der Kotakt"
+            "Contact has been verified"
 
 
 (**
@@ -824,9 +841,9 @@ module DDD0 =
 ' Die beiden Zustände einer Email als DU modellieren
 
 *)
-    type VerifizierteEmail = { Email:Email; Verifikation: EmailVerificationToken; }
+    type VerifiedEmail = { Email:Email; Verifikation: EmailVerificationToken; }
 
-    type VerifyEmail' = Email -> EmailVerificationToken -> VerifizierteEmail option
+    type VerifyEmail' = Email -> EmailVerificationToken -> VerifiedEmail option
 
 (**
 
@@ -839,22 +856,23 @@ module DDD0 =
 
 *)
 
-    type UnverifizierterKontakt = { Name: PersonenName; Email:Email; }
+    type UnverifiedContact = { Name: PersonalName; Email:Email; }
 
-    type VerifizierterKontakt = { Name: PersonenName; Email:VerifizierteEmail; }
+    type VerifiedContact = { Name: PersonalName; Email:VerifiedEmail; }
 
     type Kontakt' = 
-        | UnverifizierterKontakt of UnverifizierterKontakt
-        | VerifizierterKontakt of VerifizierterKontakt
+        | UnverifiedContact of UnverifiedContact
+        | VerifiedContact of VerifiedContact
 
-    let ``Funktion gilt nur für verifizierte ohne Prüfung`` verifizierterKontakt = 
-        verifizierterKontakt.Email.Email
+    let ``Funktion only applies to verified contacts`` verifiedContact = 
+        // I can access Email without further ado
+        verifiedContact.Email.Email
 
 (**
 
 ---
 ### DDD und F#
-#### Model für einen Kunden mit Adressen
+#### Model for a customer with an adress
 
 
 ' Das Pattern matching schränkt die Auswahl auf konkrete Typen und nicht mehr auf das Abfragen von einzelnen Werten
@@ -868,16 +886,15 @@ module DDD0 =
     type PLZ = PLZ of string
     type Land = Land of string
 
-    type PostAnschrift = { Strasse:Strasse; PLZ:PLZ; Land:Land; }
+    type PostalAdress = { Strasse:Strasse; PLZ:PLZ; Land:Land; }
 
-    type KontactInfo = 
-        | VerifizierteEmail of VerifizierteEmail
-        | PostAnschrift of PostAnschrift
-
+    type VerifiedAdress = 
+        | VerifizierteEmail of VerifiedEmail
+        | PostAnschrift of PostalAdress
 
     type Kontakt'' = 
-        | UnverifizierterKontakt of UnverifizierterKontakt
-        | VerifizierterKontakt of KontactInfo
+        | UnverifizierterKontakt of UnverifiedContact
+        | VerifizierterKontakt of VerifiedAdress
 
 (**
 
