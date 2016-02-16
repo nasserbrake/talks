@@ -426,20 +426,20 @@ printf "Area of   = %f" rectangleArea
 - Primitives often possess a special meaning in a business system
 - In a system of coordinates, both latitude and longitude are floats
 - Each, however, represents a distinct set of values
-- You could designate a type for each, rendering operations that might involve both illegal
+- Designating single case unions renders operations involving both illegal
 
 ' In DDD (Domain Driven Design) spielen diese oft eine wichtige Rolle.
 ' Z.B. kann ich dadurch Primitives so definieren, dass diese untereinander nicht „kompatibel“ sind, auch wenn diese vom gleichen Typ sind.
 
 *)
 
-// Erste Longitude ist der Name des Typs
+// First longitude is the name of the type!
 // Second is the name of the constructor
-// First is the name of the type!
-type Longitude = LongitudeConstructorFunction of float 
+
+type Longitude = Longitude of float 
 type Latitude = LatitudeConstructorFunction of float
 
-let longitude = LongitudeConstructorFunction(9.993009567260742)
+let longitude = Longitude(9.993009567260742)
 let latitude = LatitudeConstructorFunction(53.553260805869805)
 
 // Der Compiler mag das nicht, es handelt sich um zwei Typen
@@ -450,8 +450,8 @@ let latitude = LatitudeConstructorFunction(53.553260805869805)
 ***
 ### Option
 
-- Ist eine besondere Form des DU
-- Zu finden in vielen funktionalen Sprachen
+- Special form of DU
+- Found in many functional languages
 
 ' In Haskel heißt dieser Typ Maybe, Just, Nothing. in Scala heißt es auch option, some, none.
 ' wirklich nichts besonders, nur das Module Option hat eigne funktionen

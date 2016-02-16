@@ -22,10 +22,19 @@ let oid' = OrderId 5
 // Deconstruction
 let (CustomerIdConstructorFunction cidAsInt) = cid'
 
-// das geht jetzt nicht mehr!
+// Illegal!
 // cIdf oid'
+// oid' = cid'
+
+// Legal
+let (CustomerIdConstructorFunction cidInt) = cid'
+let (OrderId oidInt) = oid'
+
+cidInt = oidInt
+
 
 // Structural equality
 let cid'' = CustomerIdConstructorFunction 5
 
 cid'' = cid'
+
