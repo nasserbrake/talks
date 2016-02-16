@@ -454,12 +454,12 @@ let latitude = LatitudeConstructorFunction(53.553260805869805)
 - Found in many functional languages
 
 ' In Haskel heißt dieser Typ Maybe, Just, Nothing. in Scala heißt es auch option, some, none.
-' wirklich nichts besonders, nur das Module Option hat eigne funktionen
+' Used extensively!
 
 *)
 
-type Option<'a> = // DU mit generischem Parameter
-| Some of 'a // Gültiger Wert
+type Option<'a> = // DU with a generic paramter
+| Some of 'a // Valid value
 | None // ???
 
 
@@ -471,46 +471,49 @@ type Option<'a> = // DU mit generischem Parameter
 *)
 
 let s = Some "string"
+let none = None
+
 
 (**
 
-- Achtung: None wird nicht via Construction erstellt, sondern nur als Rückgabewert verwendet
-
 ---
-### Option: Deconstruction und Pattern Matching
+### Option: Deconstruction and Pattern Matching
 
-- Alle Fälle müssen behandelt werden, damit ich den Wert des Option extrahieren kann
+- Must handle all cases in order to extract the value of the DU
 
 *)
 
 let optionMatch s = 
     match s with 
-    | Some wert -> sprintf "Wert ist %s" wert
+    | Some wert -> sprintf "Value: %s" wert
     | None -> ""
 
 let z  = optionMatch (Some("Hello"))
-// Das nicht idiomatisch, nur für Demonstrationszwecke
 let z' = optionMatch None
+
+(** <div style="display: none" > *)
+(*** define-output:Option-PatternMatching ***)
+printf "z = %s | " z
+printf "z' = %s" z'
+(** </div> *)
+(*** include-output:Option-PatternMatching ***)
 
 (**
 
-' Achte darauf dass None hier den richtigen Typ hat, wegen des Aufruf an optionMatch: type Inference
-
-
 ---
-### Option: Deconstruction und Pattern Matching
-- Option ist meistens das Ergebnis einer Auswertung
-- None stellt den Fall dar, dass kein sinnvolles Ergebnis vorhanden ist
+### Option: Deconstruction and Pattern Matching
+- Option is often the result of an evaluation
+- None represents the case that no valid value was constructed
 
 *)
 
 let matchForOption s = 
     match s with 
-    | "Jawohl" -> Some(s)
+    | "Sure" -> Some(s)
     | _ -> None
 
-let x  = matchForOption "Jawohl"
-let x' = matchForOption "Doch nicht"
+let x  = matchForOption "Sure"
+let x' = matchForOption "Not"
 
 (** <div style="display: none" > *)
 (*** define-output:Option-Deconstruction ***)
@@ -523,12 +526,11 @@ printf "x = %A | x' = %A" x x'
 (**
 
 ---
-### Option: Nutzung
+### Option: Use
 
-- Null vs Unbekannt/Fehlend
-- Durch Option ist es möglich fehlende Werte explizit zu kennzeichnen
-- Die Kennzeichnung erfolgt durch einen eigenen Typ
-- Zugriffe auf fehlende Werte sind dann compile-time und keine run-time Fehler
+- Null vs unknown/missing
+- Option allows for an explicit designation of missing values
+- Accessing missing values becomes a *compile-time* and not a *run-time* error 
 
 ' Referenzen auf nicht vorhandene Objekte sind nicht die beste Art und Weise 
 ' Code Analysis wird verwendet um Warnungen zu geben in C# 7.0.  Keine typ Unterstützung möglich wegen backward compatibility
@@ -538,9 +540,9 @@ printf "x = %A | x' = %A" x x'
 
 ### Option vs null: Type Safety
 
-- null ist eine Reference zu einem Objekt, das nicht existiert
-- Das Typsystem kann uns dabei nicht helfen zu erkennen, dass die Variable diesen Wert hat
-- Ich kann .Length auf einen Reference null aufrufen
+- null is a reference to an object that doesn't exist
+- The type system is unable to verify if a value equals null
+- I can call .Length on a variable that has value null
 
 ' Danke Scott Wlaschin!
 
@@ -556,7 +558,7 @@ printf "x = %A | x' = %A" x x'
         {
             string s2 = null;
             var len2 = s2.Length; 
-            // WIR wissen, dass s2 null ist, der Compiler nicht
+            // We know that s2 equals null.  Not so the compiler
         }
     }
 
@@ -567,19 +569,19 @@ printf "x = %A | x' = %A" x x'
 ---
 ### Option vs null: Type Safety
 
-- Das gleiche in F# verursacht einen Compile Fehler
+- Attempting a similar call on Option causes a compile error
 
 *)
 
-let none = Option<string>.None
+let none' = Option<string>.None
 // let length = none.Length // None hat keinen Length, es ist nämlich kein String!
 
 (**
 
 ---
 ### Option vs nullable
-- Nullable gilt nur für Werttypen, keine Referenztypen
-- Option verfügt in F# über viele Hilfsfunktionen 
+- Nullable is only valid for value types, not for reference types
+- Option has great support in F# through the runtime
 
 ***
 ### DDD und FP
