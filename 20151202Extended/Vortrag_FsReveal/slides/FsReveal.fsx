@@ -306,41 +306,42 @@ printf "r''' = %s " r'''
 ***
 ### Discriminated Union
 
-- Unterscheidungs-Union auf deutsch
-- Besteht aus einer Anzahl von benannten Fällen
-- Ein benannter Fall kann aus einer Anzahl von Werten bestehen
-- Nur einer der benannten Fälle ist gültig für einen Ausdruck
-- Mit Bezeichnern oder ohne
-
+- A number of named union-cases
+- A union-case can be empty
+- A union-case can consist of a number of values
+- Values can be labeled
+- A union case is not a type in its own right
+- A union-case is best viewed as a constructor case 
 
 *)
 
-type Figur =
-| Viereck of width : float * length : float
-| Kreis of radius : float
+type Shape =
+| Circle of radius : float
+| Rectangle of width : float * length: float
+// side left without a label!
+| Square of side : float 
+
 
 (**
 
-' Es sieht ein bisschen wie ein Enum ist es aber nicht
-' Ich kann einen Enum mit DU definieren, die Interoperability mit C# wäre aber dahin.  Dafür muss ich den .net Typ verwenden
-' DU ist das ganze.  Die einzelnen möglichen Werte heißen Union Case
-' Single Case gibt es auch und sind sehr schön im DDD
-' Closed set
-' Seperation of Data and Behavior: Behavior is not scatterd across classes
+' - Looks like an enum but it isn't
+' - It would be possible  to define an enum using DU. Interoperability with C# would be brocken.  
+' - DU is THE type, example.
+' - Single Case Union is also possible is very useful in DDD
+' - Closed set: keine Erweiterung
+' - Seperation of Data and Behavior: Behavior is not scatterd across classes
 
 
 ---
-### DU: Deklaration
+### DU: Declaration
 
-- Empty Case, ist nur ein Bezeichner, keine Daten. 
-- Komposition: Record definieren und als union case verwenden
-
-' Empty case kann sehr hilfreich sein, z.B. bei DDD
+- Empty Case, consists of a Label, no Data. 
+- Composition: Define a record and use as a union-case
 
 *)
 
-type DuBeispiel =
-| Leer
+type DuExample =
+| Empty
 | Complex of ComplexNumber
 | Coordinate of GeoCoord
 
@@ -349,62 +350,83 @@ type DuBeispiel =
 ---
 ### DU: Construction
 
-Für jeden Union Case gibt es eine Constructor Funktion
+- Use the constructor functions to construct a DU value
 
 *)
 
-let viereck = Viereck(length = 1.3, width = 10.0) // ACHTUNG, Welchen Typ hat viereck?
-let kreis = Kreis (1.0)
+// ACHTUNG, can you guess the type of rectangle?
+let rectangle = Rectangle(width = 1.3, length = 10.0) 
+let circle = Circle (1.0)
+let square = Square(3.0)
+
+(**
+
+--- 
+### DU: Structural equality
+
+- Union case *and* all constituent values must be equal
+
+*)
+
+let circleEq = Circle (1.0) = Circle (1.0) 
+let circleEq' = Circle (1.0) = Circle (1.1) 
+
+(** <div style="display: none" > *)
+(*** define-output:DU-Structural equality ***)
+printf "circleEq = %A | " circleEq
+printf "circleEq' = %A " circleEq'
+(** </div> *)
+(*** include-output: DU-Structural equality ***)
 
 (**
 
 ---
 ### DU: Deconstruction & Pattern Matching
 
-- Viereck im Beispiel hatte den Type Figur, nicht Figur.Viereck!
-- Ich kann von außen nicht wissen, welchen union case ein DU-Wert darstellt
-- Nur Pattern Matching erlaubt es mir dies zu erfahren
-- Deconstruction *muss* für *alle* Fälle erfolgen (Exhaustivness)
+- rectangle in the example is of type shape, not Shape.Rectangle!
+- Looking at a DU value you cannot determine which union case it represents
+- Pattern Matching allows "peeking" into the value 
+- Deconstruction *must* happen for *all* cases (Exhaustivness)
 
-' Wenn ich einen DU anspreche dann entweder um eine Transforation zu erhalten (Fläche ermitteln) oder um 
+' Every operation I design to work with type shape, must be designed to "survive" all union cases
 
 ---
 ### DU: Deconstruction & Pattern Matching
 
 *)
 
-let flaeche s = 
+let area s = 
     match s with 
-    | Viereck (w,l) -> w*l
-    | Kreis(r) -> Math.PI*(r ** 2.0) 
-    // einen union case auszulassen verursacht einen Compiler Fehler 
-
-let kreisFlaeche   = flaeche (Kreis (5.0))
-let viereckFlaeche = Viereck(length = 5.0, width = 5.0) |> flaeche
+    | Rectangle (w,l) -> w*l
+    | Circle(r) -> Math.PI*(r ** 2.0) 
+    // Leaving out a union-case leads to a compilation error
+    | Square(s) -> (s ** 2.0)
+let circleArea   = area (Circle (5.0))
+let rectangleArea = Rectangle(length = 5.0, width = 5.0) |> area
 
 
 (** <div style="display: none" > *)
 (*** define-output:DU-PatternMatching ***)
-printf "Kreisfläche = %f | " kreisFlaeche
-printf "Viereckfläche = %f" viereckFlaeche
+printf "Area of circle = %f | " circleArea
+printf "Area of   = %f" rectangleArea  
 (** </div> *)
 (*** include-output: DU-PatternMatching ***)
 
 (**
 
 --- 
-### DU: Nutzung
+### DU: Use
 
-- DU für die Darstellung von Zuständen/Übergängen
-- Alle Fälle abdecken zu müssen führt zu weniger Fehlerfällen
-- Schnell erstellt!
+- DUs can be used to model states/transitions
+- Exhaustivness leads to less errors: no case is left out
 
 ---
 ### DU: Single Case
 
-- Primitives haben oft besondere Bedeutung
-- Höhengrad und Breitengrad sind beide floats
-- Beide Werte jedoch stellen ein anderes Konzept dar
+- Primitives often possess a special meaning in a business system
+- In a system of coordinates, both latitude and longitude are floats
+- Each, however, represents a distinct set of values
+- You could designate a type for each, rendering operations that might involve both illegal
 
 ' In DDD (Domain Driven Design) spielen diese oft eine wichtige Rolle.
 ' Z.B. kann ich dadurch Primitives so definieren, dass diese untereinander nicht „kompatibel“ sind, auch wenn diese vom gleichen Typ sind.
@@ -412,13 +434,13 @@ printf "Viereckfläche = %f" viereckFlaeche
 *)
 
 // Erste Longitude ist der Name des Typs
-// Zweite ist der Name des Constructors
-// Müssen nicht identisch sein!
-type Laengengrad = Laengengrad of float 
-type Breitengrad = Breitengrad of float
+// Second is the name of the constructor
+// First is the name of the type!
+type Longitude = LongitudeConstructorFunction of float 
+type Latitude = LatitudeConstructorFunction of float
 
-let laengengrad = Laengengrad(9.993009567260742)
-let breitengrad = Breitengrad(53.553260805869805)
+let longitude = LongitudeConstructorFunction(9.993009567260742)
+let latitude = LatitudeConstructorFunction(53.553260805869805)
 
 // Der Compiler mag das nicht, es handelt sich um zwei Typen
 // let gleich = longitude = latitude 

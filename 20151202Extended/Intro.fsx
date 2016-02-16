@@ -18,6 +18,12 @@ let f''' x = x + "Mehr"
 // Types for Functions
 type F = int -> int
 
+let g (f:F) x = f x
+
+
+
+
+
 
 
 
