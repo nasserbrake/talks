@@ -1,5 +1,5 @@
 ﻿// Tuple
-// Typ Deklaration
+// Type declaration
 type IntTuple = int * int
 type IntTuple' = int * int * int
 
@@ -14,7 +14,7 @@ let s,s',s'' = intTupleTriple
 // Structural Equality
 let intTuple' = 1,1
 
-intTuple' = intTuple // Es sind verschiedene Instanzen, jedoch wird der Abgleich richtig ausgeführt.  
+intTuple' = intTuple // Different instances/expressions, yet the comparison is structural and nor reference based
 
 let pmTuple x = // 1. ohne den letzten 2. Typ der function aufzeigen
     match x with
@@ -23,5 +23,5 @@ let pmTuple x = // 1. ohne den letzten 2. Typ der function aufzeigen
     | (2,2) -> 0
     | _ -> 2 // Exhaustiveness = Ausschöpfung
 
-// Aufrufe in interactive zeigen
+
 

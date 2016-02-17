@@ -16,28 +16,27 @@
 ***
 ### Tuple
 
-Eine Menge von Elementen 
+A set of expressions
 
-- Müssen nicht vom gleichen Typ sein
-- Die Reihenfolge ist entscheidend
-- Ist ein ad-hoc Typ: keine benannter
+- Consisting of different types
+- The order of the expressions is predetermined, identifies a tuple
+- A tuple is an ad-hoc type
 
 ' Auch wenn ich einen Typ definieren kann, kann ich einzelne Werte diesen Typen nicht zuordnen.  Die einzige Zuordnung ist den Bestandteilen und deren Reihenfolge
 
 ---
 ### Tuple: Construction
 
-- Kann beliebig viele Elemente beinhalten
-- Construction erolgt mittels Komma (mit und ohne Klammern)
-- Multiplikation von (mindestens) zwei Domains: Kartesiche Summe
+- Construction using comma (w/o parenthesis)
+- Product of two Domains: Cartesian sum
 
 *)
 
 
-type IntTuple = int * int // Jeder int 'mal' jeder int
+type IntTuple = int * int // Every int 'times' every int
 let intTuple  = 1,1
 
-type IntStringTuple = int * string // Jeder int 'mal' jeder string
+type IntStringTuple = int * string // every int 'times' every string
 let intStringTuple  = 1,"string"
 
 type TripleIntTuple = int * int * int
@@ -46,32 +45,32 @@ let tripleIntTuple = 1,2,3
 (**
 
 ---
-### Tuple: Komposition
+### Tuple: Composition
 
-Aus Primitives/einfachen Typen lassen sich komplexere erstellen
+Create complex types from primitives/simpler types
 
 *)
 
 type Complex = float * float
 let complex  = 1.0,1.0
 
-type Komposition = IntStringTuple * Complex
-let komposition  = intStringTuple,complex
+type Composition = IntStringTuple * Complex
+let composition  = intStringTuple,complex
 
 (**
 
 ---
 ### Tuple: Deconstruction/Zerlegung
-Ein Tuple in seinen Bestandteilen zerlegen
+Deconstruct a tuple into its constituent parts
 
-' In F# ist es üblich Varianten von einem Wert mittels '' zu kennzeichnen
-' Klammern sind nicht notwendig, dienen der Abgrenzung und Klarheit
+' In F# you can use '' to designate variants of an expression
+' Paranthesis are not obligatory, can help clarify intent
 
 *)
 let complex' = 1.0,2.0
 let c',c'' = complex'
-let komposition' = intStringTuple,complex'
-let k',k'' = komposition'
+let composition' = intStringTuple,complex'
+let k',k'' = composition'
 
 (** <div style="display: none" > *)
 (*** define-output:complex ***)
@@ -89,15 +88,15 @@ printf "k' = %A | k'' = %A" k' k''
 ---
 ### Tuple: Strukturelle Gleichheit/Structural equality
 
-- Typ und Reihnfolge: sind zwei Werte vergleichbar?
-- Werte: sind zwei Werte gleich?
+- Type and order: can I compare two expressions?
+- Expressions: are two expressions equal?
 
 *)
 let equal = complex' = complex
 
 (** <div style="display: none" > *)
 (*** define-output:Type-Equality ***)
-printf "Gleich = %b" equal
+printf "equal = %b" equal
 (** </div> *)
 
 (*** include-output: Type-Equality ***)
@@ -114,7 +113,7 @@ let matchTuple c =
     | 0.0,0.0 -> "0.0,0.0"
     | 1.0,1.0 -> "0.0,0.0"
     | 1.0,2.0 -> "1.0,1.0"
-    | _,_ -> "sonst"
+    | _,_ -> "otherwise"
 
 let result   = matchTuple complex
 let result'  = matchTuple complex'
@@ -130,17 +129,17 @@ printf "result'' = %A " result''
 
 (**
 
-' Fehlende Fälle werden vom Compiler festgestellt und angezeigt
+' The compiler produces compile-time errors for missing union-cases
 
 ---
-### Tuple: Nutzung in der .NET API
+### Tuple: Usage in the .NET API
 
-TryParse Methoden, die zwei Werte zurückgeben
+TryParse method that returns two expressions
 
-- bool: War das Parsen erfolgreich?
-- Wert: falls das Parsen erfolgreich war
+- bool: success/failure of parse operation
+- expression: should the parse operation successed
 
-' _ ist ein Platzhalter für egal welcher Wert erscheint, bitte nicht evaluieren
+' _ is a placeholder for whatever else, AND I promise not to touch this thing
 
 *)
 
@@ -150,7 +149,7 @@ let showParseResult result =
     | true,value -> sprintf "Value parsed is %s" (value.ToString())
     | false,_ -> "Value couldn't be parsed" 
 
-let tryParseResult = Int32.TryParse "Keine Zahl" |> showParseResult
+let tryParseResult = Int32.TryParse "No number" |> showParseResult
 let tryParseResult' = Int32.TryParse "1" |> showParseResult
 
 
