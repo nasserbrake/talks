@@ -18,17 +18,17 @@
 
 A set of expressions
 
-- Consisting of different types
-- The order of the expressions is predetermined, identifies a tuple
-- A tuple is an ad-hoc type
+* Consisting of different types
+* The order of the expressions is predetermined, identifies a tuple
+* A tuple is an ad-hoc type
 
 ' Auch wenn ich einen Typ definieren kann, kann ich einzelne Werte diesen Typen nicht zuordnen.  Die einzige Zuordnung ist den Bestandteilen und deren Reihenfolge
 
 ---
 ### Tuple: Construction
 
-- Construction using comma (w/o parenthesis)
-- Product of two Domains: Cartesian sum
+* Construction using comma (w/o parenthesis)
+* Product of two Domains: Cartesian sum
 
 *)
 
@@ -88,8 +88,8 @@ printf "k' = %A | k'' = %A" k' k''
 ---
 ### Tuple: Strukturelle Gleichheit/Structural equality
 
-- Type and order: can I compare two expressions?
-- Expressions: are two expressions equal?
+* Type and order: can I compare two expressions?
+* Expressions: are two expressions equal?
 
 *)
 let equal = complex' = complex
@@ -136,8 +136,8 @@ printf "result'' = %A " result''
 
 TryParse method that returns two expressions
 
-- bool: success/failure of parse operation
-- expression: should the parse operation successed
+* bool: success/failure of parse operation
+* expression: should the parse operation successed
 
 ' _ is a placeholder for whatever else, AND I promise not to touch this thing
 
@@ -170,8 +170,8 @@ printf "result' = %A" tryParseResult'
 
 Eine bennante Menge von benannten Elementen
 
-- Die Reihenfolge der Deklaration ist nicht relevant
-- Ist kein ad-hoc Typ
+* Die Reihenfolge der Deklaration ist nicht relevant
+* Ist kein ad-hoc Typ
 
 ' Wichtig: es ist auch nur ein Tuple, ein multiplication type
 ' Ist wie ein POCO, mit Constructor, private backing fields, public setters, equality overloads
@@ -214,8 +214,8 @@ let hamburg'       = { GeoCoord.Lat = 53.553260805869805; Long = 9.9930095672607
 ### Record: Construction
 Keine halben Sachen: 
 
-- Alle Werte müssen angegeben werden
-- Kein Wert kann verändert werden nach der Construction
+* Alle Werte müssen angegeben werden
+* Kein Wert kann verändert werden nach der Construction
 
 *)
 // let complexNumber' = { ComplexNumber.Real = 1.0; } // Imaginary gebe ich später an
@@ -263,12 +263,12 @@ printf "real = %f | imaginary = %f" real''' imaginary''
 '  Dies ist notwendig für den üblichen Fall, dass sich nicht alle Werte geändert haben, sondern nur bestimmte.  Mit der With Syntax kann ich diesen Fall gut abdecken
 
 ---
-### Record: Strukturelle Gleichheit
+### Record: Structural equality
 
-Zwei Record Werte sind gleich  
+Two records are equal if
 
-- wenn beide vom gleichen Typ sind
-- alle korrespondierende Bezeichnerdie gleichen Werte haben 
+* both are from the same type
+* all corresponding values are equal
 
 ' ACHTUNG: Wenn zwei unterschiedliche Record Typen (unterschiedlilch bennante) die gleichen Bezeichner haben, sind beide trotzdem nicht über strukturelle Gleichheit vergleichbar.  In anderen funktionalen Sprachen wird die Gleicheit anders gehandhabt
 
@@ -305,12 +305,12 @@ printf "r''' = %s " r'''
 ***
 ### Discriminated Union
 
-- A number of named union-cases
-- A union-case can be empty
-- A union-case can consist of a number of values
-- Values can be labeled
-- A union case is not a type in its own right
-- A union-case is best viewed as a constructor case 
+* A number of named union-cases
+* A union-case can be empty
+* A union-case can consist of a number of values
+* Values can be labeled
+* A union case is not a type in its own right
+* A union-case is best viewed as a constructor case 
 
 *)
 
@@ -323,19 +323,19 @@ type Shape =
 
 (**
 
-' - Looks like an enum but it isn't
-' - It would be possible  to define an enum using DU. Interoperability with C# would be brocken.  
-' - DU is THE type, example.
-' - Single Case Union is also possible is very useful in DDD
-' - Closed set: keine Erweiterung
-' - Seperation of Data and Behavior: Behavior is not scatterd across classes
+' * Looks like an enum but it isn't
+' * It would be possible  to define an enum using DU. Interoperability with C# would be brocken.  
+' * DU is THE type, example.
+' * Single Case Union is also possible is very useful in DDD
+' * Closed set: keine Erweiterung
+' * Seperation of Data and Behavior: Behavior is not scatterd across classes
 
 
 ---
 ### DU: Declaration
 
-- Empty Case, consists of a Label, no Data. 
-- Composition: Define a record and use as a union-case
+* Empty Case, consists of a Label, no Data. 
+* Composition: Define a record and use as a union-case
 
 *)
 
@@ -349,7 +349,7 @@ type DuExample =
 ---
 ### DU: Construction
 
-- Use the constructor functions to construct a DU value
+* Use the constructor functions to construct a DU value
 
 *)
 
@@ -363,7 +363,7 @@ let square = Square(3.0)
 --- 
 ### DU: Structural equality
 
-- Union case *and* all constituent values must be equal
+* Union case *and* all constituent values must be equal
 
 *)
 
@@ -382,10 +382,10 @@ printf "circleEq' = %A " circleEq'
 ---
 ### DU: Deconstruction & Pattern Matching
 
-- rectangle in the example is of type shape, not Shape.Rectangle!
-- Looking at a DU value you cannot determine which union case it represents
-- Pattern Matching allows "peeking" into the value 
-- Deconstruction *must* happen for *all* cases (Exhaustivness)
+* rectangle in the example is of type shape, not Shape.Rectangle!
+* Looking at a DU value you cannot determine which union case it represents
+* Pattern Matching allows "peeking" into the value 
+* Deconstruction *must* happen for *all* cases (Exhaustivness)
 
 ' Every operation I design to work with type shape, must be designed to "survive" all union cases
 
@@ -416,16 +416,16 @@ printf "Area of   = %f" rectangleArea
 --- 
 ### DU: Use
 
-- DUs can be used to model states/transitions
-- Exhaustivness leads to less errors: no case is left out
+* DUs can be used to model states/transitions
+* Exhaustivness leads to less errors: no case is left out
 
 ---
 ### DU: Single Case
 
-- Primitives often possess a special meaning in a business system
-- In a system of coordinates, both latitude and longitude are floats
-- Each, however, represents a distinct set of values
-- Designating single case unions renders operations involving both illegal
+* Primitives often possess a special meaning in a business system
+* In a system of coordinates, both latitude and longitude are floats
+* Each, however, represents a distinct set of values
+* Designating single case unions renders operations involving both illegal
 
 ' In DDD (Domain Driven Design) spielen diese oft eine wichtige Rolle.
 ' Z.B. kann ich dadurch Primitives so definieren, dass diese untereinander nicht „kompatibel“ sind, auch wenn diese vom gleichen Typ sind.
@@ -449,8 +449,8 @@ let latitude = LatitudeConstructorFunction(53.553260805869805)
 ***
 ### Option
 
-- Special form of DU
-- Found in many functional languages
+* Special form of DU
+* Found in many functional languages
 
 ' In Haskel heißt dieser Typ Maybe, Just, Nothing. in Scala heißt es auch option, some, none.
 ' Used extensively!
@@ -478,7 +478,7 @@ let none = None
 ---
 ### Option: Deconstruction and Pattern Matching
 
-- Must handle all cases in order to extract the value of the DU
+* Must handle all cases in order to extract the value of the DU
 
 *)
 
@@ -501,8 +501,8 @@ printf "z' = %s" z'
 
 ---
 ### Option: Deconstruction and Pattern Matching
-- Option is often the result of an evaluation
-- None represents the case that no valid value was constructed
+* Option is often the result of an evaluation
+* None represents the case that no valid value was constructed
 
 *)
 
@@ -527,9 +527,9 @@ printf "x = %A | x' = %A" x x'
 ---
 ### Option: Use
 
-- Null vs unknown/missing
-- Option allows for an explicit designation of missing values
-- Accessing missing values becomes a *compile-time* and not a *run-time* error 
+* Null vs unknown/missing
+* Option allows for an explicit designation of missing values
+* Accessing missing values becomes a *compile-time* and not a *run-time* error 
 
 ' Referenzen auf nicht vorhandene Objekte sind nicht die beste Art und Weise 
 ' Code Analysis wird verwendet um Warnungen zu geben in C# 7.0.  Keine typ Unterstützung möglich wegen backward compatibility
@@ -539,9 +539,9 @@ printf "x = %A | x' = %A" x x'
 
 ### Option vs null: Type Safety
 
-- null is a reference to an object that doesn't exist
-- The type system is unable to verify if a value equals null
-- I can call .Length on a variable that has value null
+* null is a reference to an object that doesn't exist
+* The type system is unable to verify if a value equals null
+* I can call .Length on a variable that has value null
 
 ' Danke Scott Wlaschin!
 
@@ -568,7 +568,7 @@ printf "x = %A | x' = %A" x x'
 ---
 ### Option vs null: Type Safety
 
-- Attempting a similar call on Option causes a compile error
+* Attempting a similar call on Option causes a compile error
 
 *)
 
@@ -579,26 +579,26 @@ let none' = Option<string>.None
 
 ---
 ### Option vs nullable
-- Nullable is only valid for value types, not for reference types
-- Option has great support in F# through the runtime
+* Nullable is only valid for value types, not for reference types
+* Option has great support in F# through the runtime
 
 ***
 ### DDD und FP
 #### The story hitherto
 
-- Processes of design often assume a threefold division
-    - Business people with domain knowledge
-    - Business analysts issue design-documents using intermediate formats (i.e. UML)
-    - Programmers write software based on design-documents
+* Processes of design often assume a threefold division
+    * Business people with domain knowledge
+    * Business analysts issue design-documents using intermediate formats (i.e. UML)
+    * Programmers write software based on design-documents
 
 ---
 ### DDD und FP
 #### The story hitherto
 
-- Consequences
-    - Programmers don't communicate with those who possess domain-knowledge (not directly)
-    - Roundtrip Engineering keeps code and design-documents in sync
-    - Business people have no direct interaction with code
+* Consequences
+    * Programmers don't communicate with those who possess domain-knowledge (not directly)
+    * Roundtrip Engineering keeps code and design-documents in sync
+    * Business people have no direct interaction with code
     
 ' Ohne dass sie kotzen
 
@@ -607,9 +607,9 @@ let none' = Option<string>.None
 ### DDD und FP
 #### The hope
 
-- Verifeiable design-documents
-    - You can reason about
-    - Compiler verification
+* Verifeiable design-documents
+    * You can reason about
+    * Compiler verification
 
 >"A good static type system is like having compile-time unit tests" (S. Wlaschin)
 
@@ -617,48 +617,48 @@ let none' = Option<string>.None
 ### DDD und FP
 #### The hope: Domain knowledge as a data structure
 
-- Code as design-document
-    - Code is the model: no intermediate formats
-    - Datenstrukturen are modeled as code
-    - Behavior is partially modeled through the type system
+* Code as design-document
+    * Code is the model: no intermediate formats
+    * Datenstrukturen are modeled as code
+    * Behavior is partially modeled through the type system
 
 >"Making illegal states unrepresentable" (Y. Minsky)
 
-' - Die Fachleute können ihre Dokumente schreiben in den Formaten, mit denen sie vertraut sind, die DEVs können Code schreiben
-' - In FP sind sowohl Datenstrukturen (Tuple, Record, DU) als Verhalten (Function) Types: Composition.
-' - Domainlogik legt Regeln fest die Definition (Vorname required) und Transformation Einkaufskorb -> Bestellung festlegen. Types erlauben diese Regeln zum Teil darzustellen, der Rest muss dann mit Controlflow Construkte erstellt werden
-' - MISU!!! Vielleicht hier einen Diagram malen um das Vorgehen in OO und in FP darzustellen: Offener Raum, nachträgliches Einschränken.  Geschlossener Raum, Quadrat für Quadrat gebaut, nur legale Zustände werden dargestellt
+' * Die Fachleute können ihre Dokumente schreiben in den Formaten, mit denen sie vertraut sind, die DEVs können Code schreiben
+' * In FP sind sowohl Datenstrukturen (Tuple, Record, DU) als Verhalten (Function) Types: Composition.
+' * Domainlogik legt Regeln fest die Definition (Vorname required) und Transformation Einkaufskorb -> Bestellung festlegen. Types erlauben diese Regeln zum Teil darzustellen, der Rest muss dann mit Controlflow Construkte erstellt werden
+' * MISU!!! Vielleicht hier einen Diagram malen um das Vorgehen in OO und in FP darzustellen: Offener Raum, nachträgliches Einschränken.  Geschlossener Raum, Quadrat für Quadrat gebaut, nur legale Zustände werden dargestellt
 
 ---
 ### DDD und F#
 #### Advantages of the F# type system
 
-- Type system embraces composition
-- DU allow a comprehensive representation of states
+* Type system embraces composition
+* DU allow a comprehensive representation of states
 
-' - In C# oder in Java ist die Hemmschwelle relativ hoch neue Types zu erstellen. Es gibt sogar das code smell "Primitive Obsession", kein Scherz
-' - Komposition erlaubt es einfache Typen zu immer komplexeren zusammenzufassen.  Es ist erstaunlich wie viel dann auf eine Seite passt
-' - Macht Nicht-Programmierern weniger Angst
-' - Bei Programmierung von Fachanwendungen geht es oft darum, dass ein Objekt mehrere Zustände haben kann. Jeder Zustand hat wiederum eigene Operationen, Fähigkeiten. DU erlauben diese sehr gut darzustellen
+' * In C# oder in Java ist die Hemmschwelle relativ hoch neue Types zu erstellen. Es gibt sogar das code smell "Primitive Obsession", kein Scherz
+' * Komposition erlaubt es einfache Typen zu immer komplexeren zusammenzufassen.  Es ist erstaunlich wie viel dann auf eine Seite passt
+' * Macht Nicht-Programmierern weniger Angst
+' * Bei Programmierung von Fachanwendungen geht es oft darum, dass ein Objekt mehrere Zustände haben kann. Jeder Zustand hat wiederum eigene Operationen, Fähigkeiten. DU erlauben diese sehr gut darzustellen
 
 ---
 ### DDD und F#
 #### Advantages of the F# type system
 
-- Light-weight types: less LOCs, less symbols to consider
-- Exhaustivness can lead to correctness
+* Light-weight types: less LOCs, less symbols to consider
+* Exhaustivness can lead to correctness
 
 
-' - Die geringe Zahl von Sonderzeichen/Schlüsselwörtern macht Nicht-Programmierern weniger Angst
-' PUNKT 2: Fehlende Fälle werden vom Compiler erfasst
-' - Bei Programmierung von Fachanwendungen, geht es oft darum, dass ein Objekt mehrere Zustände haben kann. Jeder Zustand hat wiederum eigene Operationen, Fähigkeiten. DU erlauben diese sehr gut darzustellen
+' * Die geringe Zahl von Sonderzeichen/Schlüsselwörtern macht Nicht-Programmierern weniger Angst
+' * PUNKT 2: Fehlende Fälle werden vom Compiler erfasst
+' * Bei Programmierung von Fachanwendungen, geht es oft darum, dass ein Objekt mehrere Zustände haben kann. Jeder Zustand hat wiederum eigene Operationen, Fähigkeiten. DU erlauben diese sehr gut darzustellen
 
 --- 
 ### DDD und F#
 
-- Examples from 
-    - fsharpforfunandprofit
-    - Jane Street (kein F#, OCaml)
+* Examples from 
+    * fsharpforfunandprofit
+    * Jane Street (kein F#, OCaml)
 
 ---
 ### DDD und F#
@@ -789,9 +789,9 @@ printf "n@b.de = %A | vvv = %A" v v'
 --- 
 ### DDD und F#
 #### States
-- Type system helps
-    - bring realted data in structures
-    - represent states
+* Type system helps
+    * bring related data in structures
+    * represent states
 
 *)
 
@@ -899,7 +899,181 @@ module DDD0 =
 
 ' Das gleiche Spiel mit der Verifikation kann ich jetzt auch mit der postalen Anschrift machen
 
+### Functions
+
+F# functions resemble mathematical functions
+
+* You apply the function to a value from a domain and get a result from the range
+* *Map* values between a *domain* and a *range*
+* Have no side effects -> reducing "incidental complexity"
+
+' Functions are really lookups
+' https://youtu.be/iSmkqocn0oQ?t=9s What are side effects?
+' Vieles hier habe ich der Diskussion auf http://fsharpforfunandprofit.com/posts/defining-functions/ entnommen
+' 
+
+***
+### Functions as values 
+
+- Declared using keyword let
+- They are independent of their names
+- Don't try to compare them though!
+
 *)
+
+let add1 x = x + 1
+let plus1 = add1
+
+(**
+
+' http://stackoverflow.com/questions/8225433/checking-function-equality-in-a-f-unit-test
+
+---
+### Functions are lambdas
+
+*)
+
+let add = fun x y -> x + y
+let add' x y = x + y
+
+(**
+
+' 
+
+---
+### Function Annotation
+
+Type annotation is only needed when type inference has failed
+
+*)
+
+let f' x = x + 1
+let f'' x = x + 1.0
+let f''' x = x + "More"
+
+(**
+
+---
+### Functions as parameters
+
+*)
+
+(** <div style="display: none"> *)
+module FunAsParams = 
+(** </div> *)
+    let evalWith5AndAdd2 f = f 5 + 2
+    let add2 x = x + 2
+    let eval = evalWith5AndAdd2 add2
+
+    let evalWith5AndAdd2' f x = f x + 2
+    let eval' = evalWith5AndAdd2' add2 5
+
+    let add5 x = x + 5
+    let eval'' = evalWith5AndAdd2' add2 5
+
+(** <div style="display: none" > *)
+(*** define-output:Fun-Param ***)
+    printf "eval = %A | eval' = %A | eval'' = %A" eval eval' eval''
+(** </div> *)
+
+(*** include-output:Fun-Param ***)
+
+(** 
+---
+### Functions as output
+
+*)
+
+(** <div style="display: none"> *)
+open System
+(** </div> *)
+
+
+let adderGenerator x = fun y -> x + y
+let add3 = adderGenerator 3
+let add4 = adderGenerator 4
+
+let eval = add3 5
+let eval' = add4 5
+
+(** <div style="display: none" > *)
+(*** define-output:Fun-Output ***)
+printf "eval = %A | eval' = %A" eval eval' 
+(** </div> *)
+(*** include-output:Fun-Output ***)
+    
+(** 
+
+' Using the lambda in adderGenerator shows that an intermediate functino is returned
+' It's also possible to write let adderGenerator = fun x -> (fun y -> x + y)
+' When this function is called with a single value, the second part is returned (fun y -> x + y) with x being fixed
+
+---
+### Functions and annotation
+
+It's still possible to add annotations
+
+*)
+
+let apply f x :int = f x // type of result is defined
+let applied = apply add3 5
+
+(** <div style="display: none" > *)
+(*** define-output:Fun-Annotation ***)
+printf "eval = %A | eval' = %A" eval eval' 
+(** </div> *)
+
+(*** include-output:Fun-Annotation ***)
+
+(**
+' In this case the signature is val apply : f:('a -> int) -> x:'a -> int and the function is generic!
+
+---
+### Function with multiple parameters?
+
+* Mathematical functions have a single input and single output
+* Programmers want functions that can take multiple inputs
+* F# achieves this through applying "currying"
+
+---
+### The other Curry
+
+![From https://wiki.haskell.org](images/HaskellBCurry.jpg)
+<div class="align-center">Haskell Brooks Curry (Image: https://wiki.haskell.org)</div>
+
+---
+### Functions without parameters
+
+*)
+
+let printToConsole = printf "Hello World"
+let printToConsole' = fun () -> printf "Hello World"
+
+(**
+
+' Achtung: The first expression is evaluated immediately, it's of type unit (F#'s notion of void, but is a real type!)
+' The second expression returns an actual function that I can call in the repl
+' Explain (|>)
+
+---
+### Partial application
+
+* Apply some of the 
+
+*)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
