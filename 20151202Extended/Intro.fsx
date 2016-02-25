@@ -18,7 +18,13 @@ module ``intro`` =
     let f'' x = x + 1.0
     let f''' x = x + "Mehr"
 
-module ``Function signature and HOF`` =
+module ``Function Signature`` =
+    type F<'a> = ('a -> bool) -> 'a list -> 'a list
+    type F'<'a> = 'a list -> 'a
+    type F''<'a,'b> = ('a -> 'b) -> 'a list -> 'b list
+    type F'''<'a> = 'a -> (unit -> string)
+
+module ``Function can be HOF`` =
 
     // Types and signatures for Functions
     type F = int -> int  // take an int THEN return an int

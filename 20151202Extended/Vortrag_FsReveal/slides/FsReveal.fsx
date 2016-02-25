@@ -913,7 +913,7 @@ F# functions resemble mathematical functions
 ' Vieles hier habe ich der Diskussion auf http://fsharpforfunandprofit.com/posts/defining-functions/ entnommen
 ' 
 
-***
+---
 ### Functions as values 
 
 * Declared using keyword let
@@ -923,24 +923,49 @@ F# functions resemble mathematical functions
 
 *)
 
-let add1 x = x + 1
-let plus1 = add1
+let add1 x = 
+    let sum = x + 1
+    sum
+
+// I can assign a function to a value
+let plus1 = add1 
 
 (**
 
 ' http://stackoverflow.com/questions/8225433/checking-function-equality-in-a-f-unit-test
+' let declares the function (it's just a value)
+' name of the function is in camelCase
+' Function parameters (input) are listed after the name of the function
+' Body of the function is indented (non tab, 4 whitespace)
+' Last item is the return value, no return is needed
+
+---
+### Functions as values
+
+And they have signatures
+
+val add1 : x:int -> int
+
+' First the parameters are listed, seperated by ->
+' Last element is the return type
+' Signatures allow us to make educated gusses about a function's nature
+' Siehe Module Function Signature
 
 ---
 ### Functions are lambdas
 
 *)
 
-let add = fun x y -> x + y
+let add = 
+    let f = fun x y -> x + y
+    f
 let add' x y = x + y
 
 (**
 
 ' Both implementations have the same signature.  Both boil down to the same implementation
+' Again, Body is indented
+' Last value is the return value, no return keyword here
 
 ---
 ### Function Annotation
@@ -984,6 +1009,9 @@ module FunAsParams =
 (*** include-output:Fun-Param ***)
 
 (** 
+
+' You can use the sigantures to define a type that you can use
+
 ---
 ### Functions as output
 
@@ -1141,6 +1169,9 @@ let addFilterSum' l =
     |> List.filter isEven   // Pipe operator provides the last paramter
     |> List.sum
 
+// Original implementation
+// List.sum(List.filter isEven (List.map add1 l))
+
 (**
 
 ' And you can enjoy looking at the implementation too! let inline (|>) x f = f x
@@ -1181,9 +1212,34 @@ let add4Multiply4 = add 4 >> times 4
 ---
 ### HOF and interfaces
 
-* 
+* Strategy Pattern rethought
 
 *)
+
+module ``Strategy`` = 
+
+    let minus x y = 
+        x - y
+    let plus x y = 
+        x + y
+
+    let calculateClient f x y = 
+        f x y
+
+    let z = calculateClient minus 10 9
+    let z' = calculateClient plus 10 9
+
+
+(**
+ 
+
+' No need to define an interface since HOF is its own signature
+' As long as the signature fits, I can call the function
+' No need to define a class/client, a function would do
+' I can call the client with different functions, no need for an immutable backing field
+    
+*)
+
 
     
 
