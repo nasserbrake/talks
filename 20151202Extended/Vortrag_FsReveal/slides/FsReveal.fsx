@@ -899,12 +899,13 @@ module DDD0 =
 
 ' Das gleiche Spiel mit der Verifikation kann ich jetzt auch mit der postalen Anschrift machen
 
+***
 ### Functions
 
 F# functions resemble mathematical functions
 
-* You apply the function to a value from a domain and get a result from the range
 * *Map* values between a *domain* and a *range*
+* Applied to a value (domain) producing a result (range)
 * Have no side effects -> reducing "incidental complexity"
 
 ' Functions are really lookups
@@ -915,9 +916,10 @@ F# functions resemble mathematical functions
 ***
 ### Functions as values 
 
-- Declared using keyword let
-- They are independent of their names
-- Don't try to compare them though!
+* Declared using keyword let
+* They are independent of their names
+* Don't try to compare them though!
+* camelCase naming is enforced
 
 *)
 
@@ -938,12 +940,15 @@ let add' x y = x + y
 
 (**
 
-' 
+' Both implementations have the same signature.  Both boil down to the same implementation
 
 ---
 ### Function Annotation
 
 Type annotation is only needed when type inference has failed
+
+' Type inference (Hindley-Milner Type Inference) is an algorithm that computes the "most general" type for a given expression
+' http://stackoverflow.com/questions/12532552/what-part-of-milner-hindley-do-you-not-understand
 
 *)
 
@@ -969,7 +974,7 @@ module FunAsParams =
     let eval' = evalWith5AndAdd2' add2 5
 
     let add5 x = x + 5
-    let eval'' = evalWith5AndAdd2' add2 5
+    let eval'' = evalWith5AndAdd2' add5 5
 
 (** <div style="display: none" > *)
 (*** define-output:Fun-Param ***)
@@ -1053,14 +1058,135 @@ let printToConsole' = fun () -> printf "Hello World"
 
 ' Achtung: The first expression is evaluated immediately, it's of type unit (F#'s notion of void, but is a real type!)
 ' The second expression returns an actual function that I can call in the repl
-' Explain (|>)
 
 ---
 ### Partial application
 
-* Apply some of the 
+* Apply some of the paramters
+* Returns a function with applied paramters baked in
 
 *)
+
+(** <div style="display: none"> *)
+module PartialApplication = 
+(** </div> *)
+    let add x y = x + y // val add : int -> int -> int
+    let add1 = add 1    // val add1 : int -> int
+    let add2 = add 2
+    let add3 = add 3
+
+(**
+ 
+---
+### Partial application
+
+A function of *n* arguments = <br/>
+A function of *1* argument that returns a function of *n-1* arguments   
+
+---
+### Partial application
+
+<div class="align-left">
+F# design rule:<br/> the most varying value is the last parameter <br/>
+val filter : ('a -> bool) -> 'a list -> 'a list <br/>
+<div/>
+
+
+
+Bake the filter in, apply the function to many lists
+
+---
+### Partial application
+
+Another example
+
+*)
+
+    let shift (dx, dy) (px, py) = (px + dx, py + dy)
+    let shiftRight = shift (1, 0)
+    let shiftUp = shift (0, 1)
+    let shiftLeft = shift (-1, 0)
+    let shiftDown = shift (0, -1) 
+
+(**
+
+' Example from Expert F# 4.0
+
+---
+### Functions and pipes
+
+* Typical scenario: Transform a value in steps
+* Output of first transformation is input to the second
+* List of ints -> addOne -> filter by even -> sum
+
+*)
+
+let isEven x = x % 2 = 0
+let addFilterSum l = List.sum(List.filter isEven (List.map add1 l))
+
+(**
+
+' reading inside out
+
+---
+### Functions and pipes
+
+* Pipes help make code readable
+
+*)
+
+let addFilterSum' l = 
+    l
+    |> List.map add1        // Partial application of List.map
+    |> List.filter isEven   // Pipe operator provides the last paramter
+    |> List.sum
+
+(**
+
+' And you can enjoy looking at the implementation too! let inline (|>) x f = f x
+' Notice that this is not a fluent interface: method instances are not needed. No Design decisions needed.
+' http://alexey.raga.name/posts/2015/08/04/fluent-interfaces/ provides a C# take on the concept
+' You chain results and inputs with appropriate functions
+
+---
+### Functions and composition
+
+* Compose simple functions to complex ones
+* Partial application means: calling with n-1 parameters yields a function
+* F# has an operator for this
+
+*)
+
+let (>>) f g x = g (f (x) )
+let times n x = n * x
+let multiply2 = times 2
+let add1Multiply2 = add1 >> multiply2
+
+(**
+
+---
+### Functions and composition
+
+* Achtung: Composition operator has lower precedence
+
+*)
+
+let add4Multiply4 = add 4 >> times 4
+
+(**
+
+' add 4/times 4 is evaluated prior to the >> operator
+' You can pipe values, you cannot compose them using >>
+
+---
+### HOF and interfaces
+
+* 
+
+*)
+
+    
+
 
 
 

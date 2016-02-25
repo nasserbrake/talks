@@ -1,0 +1,12 @@
+Mathematical functions:
+- A defined Domain (Input values)
+- A defined Range (Output values)
+
+A function is a mapping between the two, 
+a Mapping of a value from a domain to a value in the range
+don't change input
+a lookup from the preexisting list of domain values to the preexisting list of range values
+
+Mathematical functions are deterministic
+Mathematical values have no side effects
+Look at the signature
