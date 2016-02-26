@@ -1223,7 +1223,10 @@ module ``Strategy`` =
     let plus x y = 
         x + y
 
-    let calculateClient f x y = 
+    let calculateClient' f x y = 
+        f x y
+
+    let calculateClient (f:int -> int -> int) x y = 
         f x y
 
     let z = calculateClient minus 10 9
@@ -1232,11 +1235,12 @@ module ``Strategy`` =
 
 (**
  
-
+' https://en.wikipedia.org/wiki/Strategy_pattern#C.23  
 ' No need to define an interface since HOF is its own signature
 ' As long as the signature fits, I can call the function
 ' No need to define a class/client, a function would do
 ' I can call the client with different functions, no need for an immutable backing field
+' actually you don't need the annotation
     
 *)
 
