@@ -1,4 +1,4 @@
-﻿// Function
+﻿// Function Pipe
 // A special function!
 let (|>) x f = f x
 
