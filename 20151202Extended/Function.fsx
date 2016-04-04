@@ -21,8 +21,8 @@ let f' l =
     |> List.filter isEven
     |> List.sum
 
-// Ich brache die ganze Liste nicht um die Berechnung durchzuführen
-let fold sumSoFar i = 
+// Ich brauche die ganze Liste nicht um die Berechnung durchzuführen, ich kann einen akkumulator schreiben: 
+let acc sumSoFar i = 
     let i' = add1 i
     let even = isEven i'
     if even then
@@ -30,7 +30,30 @@ let fold sumSoFar i =
     else
         sumSoFar
 
-let f'' l = List.fold fold 0 l
+// Fold faltet die Liste zu einem einzigen Wert, die Zwischenergebnise werden nicht behalten
+// Die laufende Summe werden weitergereicht und nicht gespeichert
+type fold<'a,'b> = ('a -> 'b -> 'a) -> 'a -> 'b list -> 'a
+// Das erste Parameter ist ein Akkumulator: Bisheriger Wert, aktueller Wert, neuer Wert
+// Das zweite Paramter ist der Initialwert
+// Das dritte Paramter ist die Eingabe Liste
+// und zu guter Letzt, das Ergebnis: Ein Wert
 
-let sum' = f'' [0..9]
+let mitFold l = List.fold acc 0 l
+
+let sum' = mitFold [0..9]
+
+// Eine weitere Module Funktion ist scan (https://cockneycoder.wordpress.com/2016/02/16/working-with-running-totals-in-f/)
+// Scan Erzeugt eine Liste der laufenden Summe aus einer Liste
+type scan<'a,'b> = ('a -> 'b -> 'a) -> 'a -> 'b list -> 'a list
+// Das erste Parameter ist ein Akkumulator: Bisheriger Wert, aktueller Wert, neuer Wert
+// Das zweite Paramter ist der Initialwert
+// Das dritte Paramter ist die Eingabe Liste
+// und zu guter Letzt, das Ergebnis: Eine Liste aus Werten
+
+let mitScan l = List.scan acc 0 l
+
+let sum'' = mitScan [0..9]
+
+
+
 
