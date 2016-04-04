@@ -5,7 +5,7 @@
 //| Some of 'a        // valid value 
 //| None              // missing
 
-type SomeString = string option
+type SomeString = string option // Dieser type kann jetzt in der Signatur einer funktion verwendet werden anstelle des string option
 
 // Construction
 let someString = Some "string" 
@@ -16,6 +16,9 @@ let none = None // None hat keinen Typ, anders als eine null basierend auf einen
 
 // Structural Equality
 someString = Some "string"
+let s = SomeString.Some "string" // Es ist ein DU, daher TypName.UnionCaseName ist eine Funktion
+                                 // und hat die Signatur 
+                                 // val it : arg0:string -> string option = <fun:clo@19>
 
 // Pattern matching
 let optionMatch s = 
@@ -55,7 +58,7 @@ showParseResult parseResult'
 //     | Some v -> f v
 //     | None -> None
 //     
-let optionBindFun x = Some (sprintf "asdfasd %i" x)
+let optionBindFun x = Some (sprintf "Value: %i" x)
 let v = Some(1)
 let bindStringOption = Option.bind optionBindFun v 
 
@@ -89,7 +92,7 @@ let ``add ten interleaved`` numberAsText =
     | false, _ -> None 
     | _, value -> match (value % 2 = 0) with
                   | false -> None
-                  | true -> value + 10 |> Some  
+                  | true -> value + 10 |> Some  // Some ist auch nur eine Funktion!!
                   
 let inline parse< ^T when ^T : (static member TryParse : string * byref< ^T > -> bool) and  ^T : (new : unit -> ^T) > valueToParse =
     let mutable output = new ^T()
@@ -101,16 +104,17 @@ let inline parse< ^T when ^T : (static member TryParse : string * byref< ^T > ->
 /// Note that I don't need to include logic pertaining to the None branch
 /// This is handled implicitly    
 let ``add ten using module functions`` numberAsText =
-    let parsed = parse<int> numberAsText
-    let even = Option.filter (fun x -> x % 2 = 0) parsed
-    let added = Option.bind (fun x -> x + 10 |> Some ) even
-    added
+    let parsed = parse<int> numberAsText                        // Parse value
+    let even = Option.filter (fun x -> x % 2 = 0) parsed        // If even then return Option, otherwise None
+    let added = Option.bind (fun x -> x + 10 |> Some ) even     // If is option then add 10, otherwise None
+    added                                                       // Return either None or option
 
 // Option is great coupled with computation expressions
 open System
 
 /// Define a computation expression
 type MaybeBuilder() =
+    // member __.Bind() = 
     member __.Bind(option, continuation) = Option.bind continuation option
     member __.Return(value) = Some value
 
@@ -122,19 +126,13 @@ let maybe = MaybeBuilder()
 /// Takes in a string version of a number, tries to convert it to an int, adds 10, and returns the string representation back out
 let addTen numberAsText =
     maybe {
-        let! x =
-            match Int32.TryParse(numberAsText) with // TryParse return a tuple!
-            | false, _ -> None 
-            | _, value -> Some value
-        printfn "You provided me a convertable number!"
+        let! x = parse<int> numberAsText                    // let!: let-bang
+        printfn "You provided a convertible number!"
         
-        let! y = 
-            match (x % 2 = 0) with
-            | true -> Some x
-            | false -> None
-        printfn "You provided me an even number, gonna add ten for you!"
+        let! y = Option.filter (fun x -> x % 2 = 0) (Some x)
+        printfn "You provided an even number, gonna add ten for you!"
         
-        return x + 10
+        return x + 10 // Will only be called if a value is available, otherwise None is returned
     }
 
 /// Gets back a string option

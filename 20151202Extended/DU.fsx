@@ -1,7 +1,7 @@
 ﻿// DU
 // Deklaration
 type Shape =
-| Circle of radius : float // Rectangle ist hier sowohl der Name als auch der Constructor, habe also in diesem Fall drei Konstruktore
+| Circle of radius : float // Circle ist hier sowohl der Name als auch der Constructor, habe also in diesem Fall drei Konstruktore
 | Rectangle of width : float * length: float
 // side left without a label!
 | Square of side : float 
@@ -17,14 +17,14 @@ Circle (1.0) = Circle (1.0)
 Circle (1.0) = Circle (1.1) 
 
 
-// Pattern matching
+// Pattern matching muss ausschöpfend (exhaustive) sein
 let pmDU du = 
     match du with
     | Rectangle(w,l) -> w + l
     | Circle(r) -> r
     | Square(s) -> 4.0 * s
 
-// Pattern matching with escape
+// Pattern matching with escape ist immer exhaustive!
 let pmDU' du = 
     match du with
     | Rectangle(w,l) -> w + l
