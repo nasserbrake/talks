@@ -110,6 +110,7 @@ let ``add ten using module functions`` numberAsText =
     added                                                       // Return either None or option
 
 // Option is great coupled with computation expressions
+// Oder lieber doch aus dem Continuations machen
 open System
 
 /// Define a computation expression
