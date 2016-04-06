@@ -136,7 +136,7 @@ let addTen numberAsText =
         return x + 10 // Will only be called if a value is available, otherwise None is returned
     }
 
-/// Gets back a string option
+/// Returns a string option
 let values = ["15"; "n/a"; "12"; ]
 values |> List.map ``add ten interleaved``
 values |> List.map ``add ten using module functions``

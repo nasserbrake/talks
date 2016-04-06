@@ -126,10 +126,12 @@ module ``Vielleicht ohne Verschachtelung`` =
 module ``Vielleicht mit logging`` = 
     type MaybeLoggingBuilder() =
         let log x = printfn "Ausdruck ist %A" x
-        member __.Bind(option, continuation) = Option.bind continuation option
+        member __.Bind(option, continuation) = 
+            log option
+            Option.bind continuation option
         member __.Return(value) = Some value
 
-    let maybe = new MaybeLoggingBuilder()
+    let maybeLogger = new MaybeLoggingBuilder()
 
     let divideBy bottom top = 
         if bottom = 0
@@ -137,13 +139,15 @@ module ``Vielleicht mit logging`` =
         else Some(top/bottom)
 
     let divideByWorkFlow init x y z = 
-        maybe 
+        maybeLogger 
             {
             let! a = init |> divideBy x
             let! b = a |> divideBy y
             let! c = b |> divideBy z
             return c
             }
+
+    divideByWorkFlow 12 3 2 1
 
 // Es gibt mehr, viel mehr dazu, siehe dafür https://msdn.microsoft.com/de-de/library/dd233182.aspx#Anchor_1
 
@@ -211,3 +215,5 @@ module ``Maybe`` =
             let! lastProductId = getLastProductForOrder lastOrderId
             return lastProductId
         }
+
+// Weitere Variante: Error als DU definieren und dann per pattern matching reagieren
